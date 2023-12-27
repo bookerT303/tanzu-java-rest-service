@@ -1,0 +1,38 @@
+
+### First you must set the APP_URL variable in the http-client.env.json
+### Then select the correct environment to 'Run with:'
+
+### list all known Customers
+{{APP_URL}}/api/customer-profiles/
+
+### Create a customer
+# curl -X POST -H 'Content-Type: application/json' $APP_URL/api/customer-profiles -d '{"firstName": "Joe", "lastName": "Doe", "email": "joe.doe@test.org"}'
+POST {{APP_URL}}/api/customer-profiles
+Content-Type: application/json
+
+{
+  "firstName": "Joe",
+  "lastName": "Doe",
+  "email": "joe.doe@test.org"
+}
+
+> {%
+    client.test("Response content-type is json", function() {
+        var type = response.contentType.mimeType;
+        client.assert(type === "application/json", "Expected 'application/json' but received '" + type + "'");
+    });
+    client.global.set("id", response.body["id"]);
+%}
+
+### use the returned id to see the profile
+{{APP_URL}}/api/customer-profiles/{{id}}
+
+### Delete the customer
+DELETE {{APP_URL}}/api/customer-profiles/{{id}}
+
+### Delete a customers
+DELETE {{APP_URL}}/api/customer-profiles/93f4a4ea-feb2-4ab4-b0ca-521321251269
+
+### get the list of profiles again
+{{APP_URL}}/api/customer-profiles/
+###
